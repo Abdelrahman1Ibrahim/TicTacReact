@@ -26,44 +26,37 @@ function checkWinning(initialGrid) {
   }
   return false;
 }
+function handleLog(rowIndex, collIndex, setLog) {
+  initialGrid[rowIndex][collIndex] = currentPlayer === "X" ? "O" : "X";
+  setLog((prev) => {
+    return [
+      {
+        currentPlayer: currentPlayer,
+        rowIndex: rowIndex,
+        collIndex: collIndex
+      },
+      ...prev
+    ];
+  });
+}
 
+function handelRestGame(setLog) {
+  initialGrid = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""]
+  ];
+  // console.log(initialGrid);
+  currentPlayer = "X";
+  setLog([]);
+}
 function Game() {
   const [log, setLog] = useState([]);
-  // const [currentPlayer, setCurrentPlayer] = useState("X");
-
-  function handleLog(rowIndex, collIndex) {
-    initialGrid[rowIndex][collIndex] = currentPlayer === "X" ? "O" : "X";
-    setLog((prev) => {
-      return [
-        {
-          currentPlayer: currentPlayer,
-          rowIndex: rowIndex,
-          collIndex: collIndex
-        },
-        ...prev
-      ];
-    });
-  }
 
   function handleClickButton(rowIndex, collIndex) {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
-    handleLog(rowIndex, collIndex);
-    // setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+    handleLog(rowIndex, collIndex, setLog);
   }
-
-  function handelRestGame() {
-    initialGrid = [
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", ""]
-    ];
-    // console.log(initialGrid);
-    currentPlayer = "X";
-    setLog([]);
-  }
-
-  // const isDraw = initialGrid.every((row) => row.every((cell) => cell !== ""));
-  // const hasWinner = checkWinning(initialGrid);
 
   return (
     <>
@@ -80,7 +73,7 @@ function Game() {
                   : "X"
                 : "Draw"
             }
-            handelRestGame={handelRestGame}
+            handelRestGame={() => handelRestGame(setLog)}
           />
         ) : null}
       </div>
